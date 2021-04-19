@@ -80,7 +80,7 @@ task combine {
         <(for file in ${sep=" " results}; do tail -n+2 $file; done) \
         | bgzip > ${out_prefix}.imputed.txt.gz
 
-        Rscript /META_ANALYSIS/scripts/combine_zscores.R \
+        Rscript /sumstats_imputation/scripts/combine_zscores.R \
         -s ${sumstat_lift} \
         -i ${out_prefix}.imputed.txt.gz \
         -o ${out_prefix}.combined_imputed.txt
@@ -118,7 +118,7 @@ task plot {
 
         mv ${sumstat} /cromwell_root/${base}
 
-        qqplot.raiss.R --file ${base} --bp_col "POS" --chrcol "#CHR" --pval_col "p.value" --snp_col "rsID" --loglog_ylim ${loglog_ylim}
+        Rscript /sumstats_imputation/scripts/qqplot_sumstats_imp.R --file ${base} --bp_col "POS" --chrcol "#CHR" --pval_col "p.value" --snp_col "rsID" --loglog_ylim ${loglog_ylim}
 
     >>>
 
