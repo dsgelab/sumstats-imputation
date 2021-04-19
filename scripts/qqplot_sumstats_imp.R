@@ -154,6 +154,16 @@ manhattan_choose_col <- function (x, chr = "CHR", bp = "BP", p = "P", snp = "SNP
   par(xpd = FALSE)
 }
 
+# # # # # 
+
+packs <- c("qqman","optparse","data.table","R.utils")
+
+for (p in packs) {
+  if( !require(p, character.only = T)) {
+    print(p)
+    install.packages( p,  repos = c(CRAN = "http://cran.r-project.org") )
+  }
+}
 
 option_list = list(
   make_option(c("-f", "--file"), type="character", default=NULL,
