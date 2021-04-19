@@ -32,16 +32,20 @@ length(unique(studies))
 df <- df %>%
   mutate(n = as.numeric(n_cases) + as.numeric(n_controls)) %>%
   select(file, ancestry, n, name)
-# 
+
+# fwrite(df, 'Projects/covid19-hgi/META_ANALYSIS/sumstats_loc_C2_ALL.txt', sep = '\t', col.names = F)
+
+
+
+ 
 # df <- df %>%
 #   mutate(n = as.numeric(n_cases) + as.numeric(n_controls),
 #          n_eff = 4 * as.numeric(n_cases) * as.numeric(n_controls)/n) %>%
 #   select(name, n_cases, n_controls, n, n_eff)
 # fwrite(df, 'Projects/covid19-hgi/META_ANALYSIS/neff_A2_ALL.tsv', sep = '\t')
 
-#fwrite(df, 'Projects/covid19-hgi/META_ANALYSIS/sumstats_loc_B2_ALL_eur.txt', sep = '\t', col.names = F)
 
-fwrite(df, 'Projects/covid19-hgi/META_ANALYSIS/info_A2_ALL.txt', sep = '\t', col.names = T)
+#fwrite(df, 'Projects/covid19-hgi/META_ANALYSIS/info_A2_ALL.txt', sep = '\t', col.names = T)
 
 
 # # # # # # # # ## 
