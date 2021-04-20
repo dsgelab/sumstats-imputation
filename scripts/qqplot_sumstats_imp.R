@@ -106,9 +106,6 @@ manhattan_choose_col <- function (x, chr = "CHR", bp = "BP", p = "P", snp = "SNP
     abline(h = suggestiveline, col = "blue")
   if (genomewideline) 
     abline(h = genomewideline, col = "red")
-  if (otherlines)
-    trasnpos <- function(x) {loglog_p * log10(x) / log10(loglog_p)}
-  abline(h = trasnpos(c(-log10(5e-10),-log10(5e-20),-log10(5e-30),-log10(5e-40),-log10(5e-50),-log10(5e-60),-log10(5e-70),-log10(5e-80))), col = alpha("grey68", 0.5))
   if (!is.null(highlight)) {
     if (any(!(highlight %in% d$SNP))) 
       warning("You're trying to highlight SNPs that don't exist in your results.")
@@ -159,6 +156,7 @@ library(qqman)
 library(optparse)
 library(data.table)
 library(R.utils)
+library(scales)
 
 option_list = list(
   make_option(c("-f", "--file"), type="character", default=NULL,
@@ -265,7 +263,7 @@ for( pcol in pcols) {
   n_snps = nrow(data)
   n_imp = nrow(data[data[["raiss.imputed"]]==1])
   tt = paste0(title_text, " - variants: ", n_snps, ", imputed: ", n_imp)
-  manhattan( data.table(subdata[,c(bp_col,pcol,chr_col,opt$options$snp_col), with=F]) , chr=chr_col, bp=bp_col, p=pcol, ylim=c( 2,max(logs)+1), main=tt, suggestiveline=F, snp=opt$options$snp_col,
+  manhattan_choose_col( data.table(subdata[,c(bp_col,pcol,chr_col,opt$options$snp_col), with=F]) , chr=chr_col, bp=bp_col, p=pcol, ylim=c( 2,max(logs)+1), main=tt, suggestiveline=FALSE, snp=opt$options$snp_col,
              highlight=snps, hl_col = "cyan4", hl_alpha = 0.4 )
   dev.off()
   
@@ -283,7 +281,7 @@ for( pcol in pcols) {
   tick_pos <- round(seq(1, max_loglog, length.out=max_loglog))
   tick_lab <- sapply(tick_pos, function(pos) { round(ifelse(pos < loglog_p, pos, loglog_p^(pos/loglog_p))) })
   png( paste(output_prefix,"_",pcol,"_manhattan_loglog.png", sep=""), width=1000, height=400)
-  manhattan( data.table(subdata[,c(bp_col,"p_scaled",chr_col,opt$options$snp_col), with=F]) , chr=chr_col, bp=bp_col, p="p_scaled", ylim=c( 2,max_loglog), yaxt="n", main=title_text, suggestiveline=FALSE, snp=opt$options$snp_col,
+  manhattan_choose_col( data.table(subdata[,c(bp_col,"p_scaled",chr_col,opt$options$snp_col), with=F]) , chr=chr_col, bp=bp_col, p="p_scaled", ylim=c( 2,max_loglog), yaxt="n", main=tt, suggestiveline=FALSE, snp=opt$options$snp_col,
              highlight=snps, hl_col = "cyan4", hl_alpha = 0.4 )
   axis(2, at = tick_pos, labels=tick_lab, las=2)
   dev.off()
