@@ -1,0 +1,3 @@
+FROM gcr.io/covid-19-hg/meta:1d50c
+
+ADD ./ /sumstats_imputation
