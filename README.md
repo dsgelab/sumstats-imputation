@@ -4,3 +4,4 @@ Pipeline for summary statistic imputation using RAISS and meta-analysis for the 
 
 Workflow:
 
+![alt text](img/sumstats-imputation-workflow.png)
