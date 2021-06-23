@@ -81,17 +81,48 @@ task combine {
         <(for file in ${sep=" " results}; do tail -n+2 $file; done) \
         | bgzip > ${out_prefix}.sumstats_imputed_zscores.txt.gz
 
-        echo "`date` Combining original and imputed sumstats"
-        time Rscript /sumstats_imputation/scripts/combine_zscores.R \
-        -s ${sumstat_lift} \
-        -i ${out_prefix}.sumstats_imputed_zscores.txt.gz \
-        -o ${out_prefix}.sumstats_imputed.txt
+        echo "`date` Combining imputed and non-imputed"
+        time Rscript -e "
+        require(optparse)
+        require(data.table)
+        require(R.utils)
+        require(dplyr)
 
-        bgzip ${out_prefix}.sumstats_imputed.txt
-    
+        o <- '${sumstat_lift}'
+        print(paste0('reading file: ', o))
+        ori <- fread(o, header=T)
+        colnames(ori)[1] <- 'CHR'
+        ori <- ori %>%
+            mutate(Z = BETA/SE,
+                rsID = paste0(CHR, ':', POS, ':', Allele1, ':', Allele2),
+                raiss.imputed = 0) %>%
+            select(rsID, '#CHR' = CHR, POS, Allele1, Allele2, Z, p.value, raiss.imputed, N, imputationInfo, BETA, SE, AF_Allele2)
+
+        head(ori)
+        n <- ori[[1,'N']]
+
+        i <- '${out_prefix}.sumstats_imputed_zscores.txt.gz'
+        print(paste0('reading file: ', i))
+        imp <- fread(i, header=T)
+        imp <- imp %>%
+            filter(!rsID %in% ori$rsID) %>%
+            mutate('#CHR' = as.integer(sub(':.*', '', rsID)),
+                    p.value = 2*pnorm(-abs(Z)),
+                    raiss.imputed = 1,
+                    N = n) %>%
+            select(rsID, '#CHR', POS = pos, Allele1 = A0, Allele2 = A1, Z, p.value, raiss.imputed, N, imputationInfo = imputation_R2, ld_score)
+        head(imp)
+
+        out <- bind_rows(ori, imp)
+        out <- out %>%
+            arrange('#CHR', POS)
+
+        outname <- '${out_prefix}.sumstats_imputed.txt'
+        fwrite(out, outname, sep = '\t', na = 'NA', quote = FALSE)
+        "
+
         echo "`date` Compressing.."
         time bgzip ${out_prefix}.sumstats_imputed.txt
-    
     >>>
 
     output {

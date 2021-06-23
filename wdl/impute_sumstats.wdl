@@ -114,7 +114,7 @@ task harmonize {
 }
 
 
-task jass_preproc {
+task jass_preprocess {
 
     String docker
     String pop
@@ -233,7 +233,7 @@ workflow impute_sumstats {
             input: sumstat_file=lift.out, gnomad_ref=sub(gnomad_ref_template, "POP", sumstat_file[1]), n=sumstat_file[2]
         }
 
-        call jass_preproc {
+        call jass_preprocess {
             input:
             sumstat_file=harmonize.out,
             pop=sumstat_file[1],
@@ -243,7 +243,7 @@ workflow impute_sumstats {
         call sub.raiss_combine{
             input:
             chrom_list=chrom_list,
-            z_scores=jass_preproc.out_scores_chr,
+            z_scores=jass_preprocess.out_scores_chr,
             sumstat_file=sumstat_file,
             sumstat_lift=harmonize.out
         }

@@ -14,11 +14,11 @@
     "impute_sumstats.harmonize.options": "",
     "impute_sumstats.harmonize.docker": "gcr.io/covid-19-hg/sumstats-imp_lift:1.0",
 
-    "impute_sumstats.jass_preproc.ref_panel_pop": "gs://covid19-hg-imputation-sumstats/ref_panel/POP/annotation_complete.bim",
-    "impute_sumstats.jass_preproc.minMAF": 0.01,
-    "impute_sumstats.jass_preproc.minAF": 0.01,
-    "impute_sumstats.jass_preproc.maxAF": 0.99,
-    "impute_sumstats.jass_preproc.docker": "gcr.io/covid-19-hg/sumstats-imp:1.0",
+    "impute_sumstats.jass_preprocess.ref_panel_pop": "gs://covid19-hg-imputation-sumstats/ref_panel/POP/annotation_complete.bim",
+    "impute_sumstats.jass_preprocess.minMAF": 0.01,
+    "impute_sumstats.jass_preprocess.minAF": 0.01,
+    "impute_sumstats.jass_preprocess.maxAF": 0.99,
+    "impute_sumstats.jass_preprocess.docker": "gcr.io/covid-19-hg/sumstats-imp:1.0",
 
     "impute_sumstats.raiss_combine.raiss.eigen_threshold": 0.0001,
     "impute_sumstats.raiss_combine.raiss.r2_threshold": 0.8,
@@ -28,9 +28,9 @@
     "impute_sumstats.raiss_combine.raiss.ld_slices_path_pop": "covid19-hg-imputation-sumstats/ld/LD_scipy_sparse/POP",
     "impute_sumstats.raiss_combine.raiss.docker": "gcr.io/covid-19-hg/sumstats-imp:1.0", 
 
-    "impute_sumstats.raiss_combine.combine.docker": "gcr.io/covid-19-hg/sumstats-imp:1.0",
+    "impute_sumstats.raiss_combine.combine.docker": "gcr.io/covid-19-hg/sumstats-imp_combine-plot:1.0",
     
-    "impute_sumstats.raiss_combine.plot.docker": "gcr.io/covid-19-hg/sumstats-imp:1.0",
+    "impute_sumstats.raiss_combine.plot.docker": "gcr.io/covid-19-hg/sumstats-imp_combine-plot:1.0",
     "impute_sumstats.raiss_combine.plot.loglog_ylim": 100
 
 }

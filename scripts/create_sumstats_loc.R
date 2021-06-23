@@ -7,7 +7,7 @@ library(dplyr)
 # conf files located in "gs://covid19-hg-analysis/20201215/conf/2/json/B2_ALL.json"
 setwd('~')
 
-f <- 'Projects/covid19-hgi/META_ANALYSIS/20201215_conf_5_filtered_json_B2_ALL.json'
+f <- 'Projects/covid19-hgi/META_ANALYSIS_MC/20201215_conf_5_filtered_json_B2_ALL.json'
 d <- fromJSON(file = f)
 
 d <- d$meta
@@ -37,6 +37,6 @@ df <- df %>%
                          grepl("ANA(C1|_C1)", toupper(file)) ~ "C1",
                          (grepl("ANA(C2|_C2)", toupper(file)) | grepl(".C2", toupper(file)) | grepl("_C2", toupper(file))) ~ "C2"),
          name = paste(name, ana, sep = "_")) %>%
-  select(file, ancestry, n, name)
+  select(file, ancestry, n, name, n_cases, n_controls)
 
-fwrite(df[2:3], 'Projects/covid19-hgi/sumstats-imputation/conf/sumstats_loc_B2_ALL_test.txt', sep = '\t', col.names = F)
+fwrite(df, 'Projects/covid19-hgi/sumstats-imputation/conf/sumstats_loc_B2_ALL.txt', sep = '\t', col.names = F)
